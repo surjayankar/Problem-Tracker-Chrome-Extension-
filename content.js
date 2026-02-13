@@ -1,7 +1,20 @@
 const bookmarkImgUrl=chrome.runtime.getURL("assets/bookmark.png");
 const problemkey="problemkey"
-window.addEventListener("load",addBookMarkButton);
+
+const observer=new MutationObserver(()=>{
+    addBookMarkButton();
+})
+
+observer.observe(document.body,{childList:true,subtree:true});
+addBookMarkButton();
+
+function onProblemsPage(){
+    return window.location.pathname.startsWith("/problems/");
+}
 function addBookMarkButton(){
+    if(!onProblemsPage() || document.getElementById("add-bookmark-button")){
+        return;
+    }
     const bookmarkButton=document.createElement("button");
     bookmarkButton.id="add-bookmark-button";
     bookmarkButton.style.backgroundImage=`url(${bookmarkImgUrl})`;
